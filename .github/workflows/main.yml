@@ -13,4 +13,5 @@ jobs:
       - name: "Afficher le repertoire de travail"
         run: pwd
       - run: echo "second step"
+      - run: ls
     
