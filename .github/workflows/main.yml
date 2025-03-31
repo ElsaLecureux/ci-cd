@@ -1,16 +1,20 @@
-name: "Mon premier workflow"
+name: "exo1.5"
 
 on: push
 
 jobs:
   job1:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-lastest
     steps:
-      - run: echo "Hello, world"
+      - run: whoami
+      - uses: action/checkout@v4
+      - run: mkdir new_folder
+      - run: cd new_folder
+      - run: echo "hello world!" > helloWorld.txt
+      - run: cd ..
+      - run: ls 
   job2:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-lastest
     steps:
+      - uses: action/checkout@v4
       - run: ls
-      - uses: actions/checkout@v4
-      - run: ls
-    
