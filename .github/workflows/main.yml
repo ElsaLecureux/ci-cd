@@ -9,10 +9,8 @@ jobs:
       - run: whoami
       - uses: actions/checkout@v4
       - run: mkdir new_folder
-      - run: cd new_folder
-      - run: echo "hello world!" > helloWorld.txt
-      - run: cd ..
-      - run: ls 
+      - run: echo "hello world!" > new_folder/helloWorld.txt
+      - run: ls && ls new_folder
   job2:
     runs-on: ubuntu-latest
     steps:
