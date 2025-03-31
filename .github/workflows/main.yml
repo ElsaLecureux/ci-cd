@@ -10,8 +10,7 @@ jobs:
   job2:
     runs-on: ubuntu-latest
     steps:
-      - name: "Afficher le repertoire de travail"
-        run: pwd
-      - run: echo "second step"
+      - run: ls
+      - uses: actions/checkout@v4
       - run: ls
     
