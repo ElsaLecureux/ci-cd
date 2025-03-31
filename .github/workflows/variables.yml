@@ -15,6 +15,6 @@ jobs:
           VAR_FROM_STEP: "var from step"
         run: |
           echo "VAR_FROM_WORKFLOW: $VAR_FROM_WORKFLOW"
-          echo "VAR__FROM_JOB: $VAR__FROM_JOB"
+          echo "VAR_FROM_JOB: $VAR_FROM_JOB"
           echo "VAR_FROM_STEP: $VAR_FROM_STEP"
           echo "GITHUB_REF: $GITHUB_REF"
