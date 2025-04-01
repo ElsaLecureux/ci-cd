@@ -1,0 +1,22 @@
+name: "ci-dc"
+
+on: 
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  tests:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-node@v4
+        - run: npm install
+        - run: npm run test:ci
+  deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - run: echo github.ref
+        - run: echo ${{ github.ref == "refs/heads/dev" ? "Deploying to DEVELOPMENT environment" : "Deploying to PRODUCTION environment" }}
+
