@@ -18,5 +18,10 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - run: echo github.ref
-        - run: echo ${{ github.ref == "refs/heads/dev" ? "Deploying to DEVELOPMENT environment" : "Deploying to PRODUCTION environment" }}
+        - name: "deploy dev"
+          if : github.ref == "refs/heads/dev"
+          run: echo "Deploying to DEVELOPMENT environment"
+        - name: "deploy prod"
+          if : github.ref == "refs/heads/main"
+          run: echo "Deploying to PRODUCTION environment"
 
