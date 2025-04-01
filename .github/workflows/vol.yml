@@ -47,11 +47,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: print-rapport
-        if : ${{ needs.detective.outputs.autorisation_arrestation == 'false' }} 
-        run: echo enquete sans suite
-        #run: echo ${{ needs.detective.outputs.rapport}}
+        if : needs.detective.outputs.autorisation_arrestation == 'false'
+        run: |
+          echo ${{ needs.detective.outputs.rapport}}
+          echo enquete sans suite
+        
       - id: arrestation
-        if : ${{ needs.detective.outputs.autorisation_arrestation == 'true' }} 
+        if : needs.detective.outputs.autorisation_arrestation == 'true'
         run: echo arrestation
         
 
