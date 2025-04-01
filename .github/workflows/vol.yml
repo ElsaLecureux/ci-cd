@@ -1,0 +1,61 @@
+name: vol
+
+on: push
+
+jobs:
+  policier-scene:
+    #collecte des empruntes
+    runs-on: ubuntu-latest
+    outputs:
+        empreinte:
+            "empreinte trouvée sur la caisse"
+    steps:
+      - run: echo "Le policier examine la caisse enregistreuse"
+      - run: echo "Empreinte prélevée sur la caisse"
+  policier-video:
+    #récupération des vidéos
+    runs-on: ubuntu-latest
+    outputs:
+        video:
+          ${{ steps.sequence-video.resultat }}
+
+    steps:
+        - id: sequence-video
+          run: echo "resultat=Séquence vidéo 22h15-22h45 récupérée" >> $GITHUB_OUTPUT
+  detective:
+    # doit attendre que les policiers finissent leur travail
+    needs: [policier-scene ,policier-video]
+    runs-on: ubuntu-latest
+    outputs:
+      rapport: ${{ steps.step3.outputs.conclusion }}
+      lieu_arrestation: ${{ steps.step3.outputs.lieu }}
+      autorisation_arrestation: ${{ steps.step3.outputs.autorisation }}
+    steps:
+      - id: step1
+        run: echo ${{ needs.policier-scene.outputs.empreinte }} ${{ needs.policier-video.outputs.video }}
+      - id: step2
+        run: |
+          echo "ANALYSE_EMPREINTE=Empreinte correspond à un suspect connu" >> $GITHUB_ENV
+          echo "ANALYSE_VIDEO=Suspect indentifié sur la video à 22h30" >> $GITHUB_ENV
+      - id: step3
+        run: |
+          echo "conclusion =${{ env.ANALYSE_EMPREINTE }} ${{ env.ANALYSE_VIDEO }} suspect identifié" >> $GITHUB_OUTPUT
+          echo "lieu=42 Avenue du Commerce, Supermarché SuperPrix" >> $GITHUB_OUTPUT
+          echo "autorisation=true" >> $GITHUB_OUTPUT
+  police:
+    needs: detective
+    runs-on: ubuntu-latest
+    steps:
+      - id: print-rapport
+        if : ${{ needs.detective.outputs.autorisation_arrestation == 'false' }} 
+        run: echo enquete sans suite
+        #run: echo ${{ needs.detective.outputs.rapport}}
+      - id: arrestation
+        if : ${{ needs.detective.outputs.autorisation_arrestation == 'true' }} 
+        run: echo arrestation
+        
+
+    
+
+
+  

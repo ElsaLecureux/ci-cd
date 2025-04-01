@@ -17,7 +17,6 @@ jobs:
   deploy:
       runs-on: ubuntu-latest
       steps:
-        - run: echo ${{github.ref}}
         - name: "deploy dev"
           if : github.ref == 'refs/heads/dev'
           run: echo "🚀 Deploying to DEVELOPMENT environment"
