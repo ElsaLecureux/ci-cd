@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
         video:
-          ${{ steps.sequence-video.resultat }}
+          ${{ steps.sequence-video.outputs.resultat }}
 
     steps:
         - id: sequence-video
@@ -39,19 +39,19 @@ jobs:
           echo "ANALYSE_VIDEO=Suspect indentifié sur la video à 22h30" >> $GITHUB_ENV
       - id: step3
         run: |
-          echo "conclusion =${{ env.ANALYSE_EMPREINTE }} ${{ env.ANALYSE_VIDEO }} suspect identifié" >> $GITHUB_OUTPUT
+          echo "conclusion=${{ env.ANALYSE_EMPREINTE }} ${{ env.ANALYSE_VIDEO }}, suspect identifié!" >> $GITHUB_OUTPUT
           echo "lieu=42 Avenue du Commerce, Supermarché SuperPrix" >> $GITHUB_OUTPUT
-          echo "autorisation=true" >> $GITHUB_OUTPUT
+          echo "autorisation=false" >> $GITHUB_OUTPUT
   police:
     needs: detective
     runs-on: ubuntu-latest
     steps:
       - id: print-rapport
-        if : needs.detective.outputs.autorisation_arrestation == 'false'
         run: |
-          echo ${{ needs.detective.outputs.rapport}}
-          echo enquete sans suite
-        
+          echo "${{needs.detective.outputs.rapport}}"
+      - id: sans_suite
+        if : needs.detective.outputs.autorisation_arrestation == 'false'
+        run: echo enquete sans suite
       - id: arrestation
         if : needs.detective.outputs.autorisation_arrestation == 'true'
         run: echo arrestation
