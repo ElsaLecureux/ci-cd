@@ -1,0 +1,28 @@
+name: pizzeria
+
+on: 
+  workflow_dispatch:
+    inputs:
+      nom_client:
+        description: "nom du client"
+        required: true
+      pizzas:
+        description: "liste des pizzas commandées"
+        required: true
+
+jobs:
+  reception_commande:
+    name: "Reception de la commande"
+    runs-on: ubuntu-latest
+    outputs:
+        nom_client: ${{steps.commande.outputs.nom_client}}
+        pizzas: ${{steps.commande.outputs.pizzas}}
+    steps:
+      - id: commande
+        run: |
+          echo "nom_client=${{ github.event.inputs.nom_client }}" >> $GITHUB_OUTPUT
+          echo "pizzas=${{ github.event.inputs.pizzas }}" >> $GITHUB_OUTPUT
+      - id: welcoming
+        run: echo "welcome "${{ github.job.outputs.nom_client }}
+          
+
