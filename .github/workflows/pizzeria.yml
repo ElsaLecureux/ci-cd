@@ -31,12 +31,25 @@ jobs:
         pizza: ${{ fromJSON(needs.reception_commande.outputs.pizzas)}}
         taille: ["L", "XL"]
         include:
-          - pizza: "pizza dessert gratuite"
+          - pizza: "dessert"
             taille: "M"
     runs-on: ubuntu-latest
     steps:
       - id: preparation
         name: preparation
-        run: |
-          echo "La pizza ${{ matrix.pizza }} taille ${{ matrix.taille }} est en cours de préparation"
+        run: echo "La pizza ${{ matrix.pizza }} taille ${{ matrix.taille }} est en cours de préparation"
+  livraison:
+    needs: cuisine
+    name: "livraison"
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    runs-on: ubuntu-latest 
+    steps:
+      - name: préparation de la livraison pour le client
+        run: echo "Préparation de la livraison pour ${{ needs.reception_commande.outputs.nom_client }}"
+      - name: pizzas à livrer
+        run: echo "Les pizzas à livrer sont: ${{ needs.cuisine.pizza }}"
+      
+
 
