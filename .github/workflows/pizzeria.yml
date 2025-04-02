@@ -42,15 +42,14 @@ jobs:
     needs: [cuisine, reception_commande]
     name: "livraison"
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+      group: zone-livraison
       cancel-in-progress: true
     runs-on: ubuntu-latest 
     steps:
       - name: préparation de la livraison pour le client
         run: echo "Préparation de la livraison pour ${{ needs.reception_commande.outputs.nom_client }}"
-      - name: pizzas à livrer
-        run: echo test
-        #run: echo "Les pizzas à livrer sont: ${{ needs.reception_commande.outputs.pizzas }}"
+      - name: livraison des pizzas 
+        run: echo "Les pizzas à livrer sont: ${{ needs.cuisine.outputs.pizzas }}"
   reclamation:
     needs: livraison
     name: reclamation
@@ -58,9 +57,12 @@ jobs:
     permissions:
       issues: write
     steps:
-      - run: gh issue create --title "issue_title" --body "issue with delivery"
+      - uses: actions/checkout@v4
+      - name: creation reclamation
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+        run: gh issue create --title "réclamation client" --body "pizzas froides"
+      
            
 
   
