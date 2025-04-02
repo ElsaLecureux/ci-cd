@@ -39,7 +39,7 @@ jobs:
         name: preparation
         run: echo "La pizza ${{ matrix.pizza }} taille ${{ matrix.taille }} est en cours de préparation"
   livraison:
-    needs: cuisine
+    needs: [cuisine, reception_commande]
     name: "livraison"
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
@@ -49,7 +49,21 @@ jobs:
       - name: préparation de la livraison pour le client
         run: echo "Préparation de la livraison pour ${{ needs.reception_commande.outputs.nom_client }}"
       - name: pizzas à livrer
-        run: echo "Les pizzas à livrer sont: ${{ needs.cuisine.pizza }}"
+        run: echo test
+        #run: echo "Les pizzas à livrer sont: ${{ needs.reception_commande.outputs.pizzas }}"
+  reclamation:
+    needs: livraison
+    name: reclamation
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - run: gh issue create --title "issue_title" --body "issue with delivery"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+           
+
+  
       
 
 
