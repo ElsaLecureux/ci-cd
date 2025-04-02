@@ -15,14 +15,30 @@ jobs:
     name: "Reception de la commande"
     runs-on: ubuntu-latest
     outputs:
-        nom_client: ${{steps.commande.outputs.nom_client}}
-        pizzas: ${{steps.commande.outputs.pizzas}}
+      nom_client: ${{ github.event.inputs.nom_client }}
+      pizzas: ${{ github.event.inputs.pizzas }}
     steps:
       - id: commande
+        name: commande
         run: |
-          echo "nom_client=${{ github.event.inputs.nom_client }}" >> $GITHUB_OUTPUT
-          echo "pizzas=${{ github.event.inputs.pizzas }}" >> $GITHUB_OUTPUT
-      - id: welcoming
-        run: echo "welcome "${{ github.job.outputs.nom_client }}
-          
+          echo "Bienvenue ${{ github.event.inputs.nom_client }}!"
+          echo "Récapitulatif de la commande: ${{ github.event.inputs.pizzas }}"
+  cuisine:
+    needs: reception_commande
+    name: "cuisine"
+    strategy:
+      matrix:
+        pizza: ${{ fromJSON(needs.reception_commande.outputs.pizzas)}}
+        taille: ["L", "XL"]
+        include:
+          - pizza: "pizza dessert gratuite"
+            taille: "M"
+    runs-on: ubuntu-latest
+    steps:
+      - id: preparation
+        name: preparation
+        run: |
+          echo "La pizza ${{ matrix.pizza[0]}} est en cours de préparation"
+          echo "La pizza ${{ matrix.pizza[1]}} est en cours de préparation"
+          echo "La pizza ${{ matrix.pizza[2]}} est en cours de préparation"
 
