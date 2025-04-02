@@ -38,7 +38,5 @@ jobs:
       - id: preparation
         name: preparation
         run: |
-          echo "La pizza ${{ matrix.pizza[0]}} est en cours de préparation"
-          echo "La pizza ${{ matrix.pizza[1]}} est en cours de préparation"
-          echo "La pizza ${{ matrix.pizza[2]}} est en cours de préparation"
+          echo "La pizza ${{ matrix.pizza }} taille ${{ matrix.taille }} est en cours de préparation"
 
