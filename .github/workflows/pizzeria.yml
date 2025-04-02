@@ -37,7 +37,10 @@ jobs:
     steps:
       - id: preparation
         name: preparation
-        run: echo "La pizza ${{ matrix.pizza }} taille ${{ matrix.taille }} est en cours de préparation"
+        run: |
+          echo "La pizza ${{ matrix.pizza }} taille ${{ matrix.taille }} est en cours de préparation"
+          echo "pizza=${{ matrix.pizza }} ${{ matrix.taille }}" >> $GITHUB_OUTPUT
+
   livraison:
     needs: [reception_commande, cuisine]
     name: "livraison"
