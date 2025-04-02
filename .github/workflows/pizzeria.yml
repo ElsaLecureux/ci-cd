@@ -39,7 +39,7 @@ jobs:
         name: preparation
         run: echo "La pizza ${{ matrix.pizza }} taille ${{ matrix.taille }} est en cours de préparation"
   livraison:
-    needs: reception_commande
+    needs: [reception_commande, cuisine]
     name: "livraison"
     concurrency:
       group: zone-livraison
@@ -49,7 +49,7 @@ jobs:
       - name: préparation de la livraison pour le client
         run: echo "Préparation de la livraison pour ${{ needs.reception_commande.outputs.nom_client }}"
       - name: livraison des pizzas 
-        run: echo "Les pizzas à livrer sont ${{ needs.reception_commande.outputs.pizza }}"
+        run: echo "Les pizzas à livrer sont ${{ needs.cuisine.outputs.pizza }}"
   reclamation:
     needs: livraison
     name: reclamation
